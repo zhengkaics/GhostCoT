@@ -1,15 +1,15 @@
-# 👻 Zero-Shot CoT Evasion: Bypassing Fast-DetectGPT
+# 👻 GhostCoT: Zero-Shot Evasion for Fast-DetectGPT
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Status: Experimental](https://img.shields.io/badge/Status-Experimental-success.svg)]()
 
-本开源项目提出了一种纯基于 Prompt 工程的零样本（Zero-Shot）文本重写架构。通过引入**隐式思维链（Implicit Chain-of-Thought, CoT）**与**强制变异指令**，本项目能够在保持文本逻辑连贯性的前提下，彻底破坏大语言模型（LLM）默认的均质概率分布，成功绕过以 [Fast-DetectGPT](https://github.com/baojianhai/Fast-DetectGPT) 为代表的基于概率曲率（Probability Curvature）的 AI 内容检测引擎。
+本开源项目提出了一种纯基于 Prompt 工程的零样本（Zero-Shot）文本重写架构。通过引入**隐式思维链（Implicit Chain-of-Thought, CoT）**与**强制变异指令**，GhostCoT 能够在保持文本逻辑连贯性的前提下，彻底破坏大语言模型（LLM）默认的均质概率分布，成功绕过以 [Fast-DetectGPT](https://github.com/baojianhai/Fast-DetectGPT) 为代表的基于概率曲率（Probability Curvature）的 AI 内容检测引擎。
 
 ## 📊 Benchmark 测试数据
 
 在没有任何外部 RAG 数据注入的情况下，单次 Prompt 调用的真实对抗测试结果如下：
 
-| 指标 | 重写前 (Baseline AI) | 重写后 (Zero-Shot CoT) | 变化 |
+| 指标 | 重写前 (Baseline AI) | 重写后 (GhostCoT) | 变化 |
 | :--- | :--- | :--- | :--- |
 | **平均 AI 概率 (AI Prob)** | 0.9546 | **0.4284** | **- 55.12% 📉** |
 | **平均曲率 (Crit)** | 3.7239 | **1.1903** | **- 68.04% 📉** |
@@ -20,13 +20,24 @@
 
 ---
 
+## ✂️ 前置准备：文本切片与滑动窗口 (Chunking Strategy)
+
+**这是 GhostCoT 发挥极限威力的核心前提。**
+大模型在处理超长文本生成时，会产生“指令遗忘”，导致防检测规则在文本中后段失效。因此，**切勿将整篇文章直接输入**。你必须在工程代码侧对长文本进行分块（Chunking）预处理：
+
+1. **无重叠硬切分 (Hard Split without Overlap)**：按自然段切分，建议每个 Chunk 长度控制在 **300-500 字**左右。**绝对不要**保留传统 RAG 的文本重叠区（Overlap），否则会导致剧情复读。
+2. **构建滑动窗口 (Sliding Window)**：在遍历改写每个 Chunk 时，动态提取上一个已改写 Chunk 的末尾 150 字作为 `previous_chunk_tail`，提取下一个待改写 Chunk 的开头 50 字作为 `next_chunk_head`。
+3. **提取末句锚点 (End-Anchor)**：用代码提取当前待改写 Chunk 的最后一句话，作为大模型收尾的强制物理限制，彻底消除 Chunk 之间的逻辑断层与剧情偏移。
+
+---
+
 ## 🧠 原理解析：为什么它能击穿 0 样本检测？
 
 ### 1. 传统检测器的软肋：概率曲率 (Log-Probability Curvature)
 Fast-DetectGPT 等先进检测器的核心数学原理是：AI 在生成文本时，总是倾向于**贪心采样**（选择概率最高的下一个 Token）。因此，AI 生成的文本在统计学上表现为一条**极其平滑、持续处于高概率区间的曲线**。而人类写作充满跳跃性、反直觉词汇和参差的句式，表现为充满“统计学噪声”的锯齿状低概率曲线。
 
 ### 2. 拘束衣悖论 (The Straitjacket Paradox)
-如果在普通的 Prompt 中要求 AI “写得像人类、多用短句、少用套话”，并在同时施加严格的上下文逻辑约束时，大模型的算力会发生**过载**。为了保证逻辑不出错，模型会本能地退回到它最安全的底层语法区（即最高概率的均质词汇），导致“防检测指令”完全失效。
+如果在普通的 Prompt 中要求 AI “多用短句、少用套话”，并同时施加严格的上下文逻辑约束时，大模型的算力会发生**过载**。为了保证逻辑不出错，模型会本能地退回到它最安全的底层语法区（即最高概率的均质词汇），导致“防检测指令”完全失效。
 
 ### 3. 本项目的破局点：隐式思维链 (Implicit CoT)
 我们在输出最终文本前，强制模型生成一个 `<thought_process>` 标签。在这个思考域中，模型必须完成以下任务：
@@ -53,7 +64,7 @@ Transformer 模型本质上是一个“Next-Token Predictor”。
 
 ## 🚀 核心 Prompt 模版 (Core Template)
 
-以下是经过高度抽象的 Zero-Shot CoT 模版，可直接用于系统 API 调用：
+以下是经过高度抽象的 Zero-Shot CoT 模版，可直接用于系统 API 调用。请配合前文提到的**文本切片策略**循环注入数据：
 
 ```text
 # Role
@@ -75,6 +86,9 @@ Transformer 模型本质上是一个“Next-Token Predictor”。
 
 【上文语境参考】(⚠️ 仅供体会衔接感，无需重写)
 {{ previous_chunk_tail }}
+
+【下文前瞻预读】(⚠️ 仅供找准收尾方向，绝对禁止提前写出这里的剧情)
+{{ next_chunk_head }}
 
 【原始文本】(⚠️ 待重写核心)
 {{ ai_draft_chunk }}
