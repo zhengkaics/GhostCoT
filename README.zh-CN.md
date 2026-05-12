@@ -9,7 +9,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Status: Experimental](https://img.shields.io/badge/Status-Experimental-success.svg)]()
 
-本开源项目提出了一种纯基于 Prompt 工程的零样本（Zero-Shot）文本重写架构。通过引入**隐式思维链（Implicit Chain-of-Thought, CoT）**与**强制变异指令**，GhostCoT 能够在保持文本逻辑连贯性的前提下，彻底破坏大语言模型（LLM）默认的均质概率分布，成功绕过以 [Fast-DetectGPT](https://github.com/baojianhai/Fast-DetectGPT) 为代表的基于概率曲率（Probability Curvature）的 AI 内容检测引擎。
+本开源项目提出了一种纯基于 Prompt 工程的零样本（Zero-Shot）文本重写架构。通过引入**隐式思维链（Implicit Chain-of-Thought, CoT）**与**强制变异指令**，GhostCoT 能够在保持文本逻辑连贯性的前提下，彻底破坏大语言模型（LLM）默认的均质概率分布，成功绕过以 [Fast-DetectGPT](https://github.com/baoguangsheng/fast-detect-gpt) 为代表的基于概率曲率（Probability Curvature）的 AI 内容检测引擎。
 
 ## 📊 Benchmark 测试数据
 

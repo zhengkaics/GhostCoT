@@ -9,7 +9,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Status: Experimental](https://img.shields.io/badge/Status-Experimental-success.svg)]()
 
-This open-source project introduces a Zero-Shot text rewriting architecture based purely on Prompt Engineering. By introducing an **Implicit Chain-of-Thought (CoT)** combined with **Forced Mutation Directives**, GhostCoT completely disrupts the homogeneous probability distribution typical of Large Language Models (LLMs). It successfully bypasses AI content detection engines like [Fast-DetectGPT](https://github.com/baojianhai/Fast-DetectGPT) that rely on log-probability curvature—all while maintaining absolute logical coherence in the text.
+This open-source project introduces a Zero-Shot text rewriting architecture based purely on Prompt Engineering. By introducing an **Implicit Chain-of-Thought (CoT)** combined with **Forced Mutation Directives**, GhostCoT completely disrupts the homogeneous probability distribution typical of Large Language Models (LLMs). It successfully bypasses AI content detection engines like [Fast-DetectGPT](https://github.com/baoguangsheng/fast-detect-gpt) that rely on log-probability curvature—all while maintaining absolute logical coherence in the text.
 
 ## 📊 Benchmark Results
 
