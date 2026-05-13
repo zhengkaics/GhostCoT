@@ -70,4 +70,34 @@ Transformer 模型本质上是一个“Next-Token Predictor”。
 
 ## 🚀 Core Prompt Template Example:
 
-👉 **[点击这里查看完整的 Zero-Shot CoT Prompt 模版源码例子](./ghostCot_template_cn.jinja)**
+👉 **[Prompt Template](./ghostCot_template_cn.jinja)**
+
+---
+
+## 🚀 进阶：GhostCoT 两步思考版 (Two-Stage Reasoning)
+
+除了针对文学创作优化的标准版，我们还提供了 **GhostCoT 两步思考增强版**。该版本引入了“元认知”机制，将思考过程解耦为**领域自适应分析**与**战术执行规划**，具备更强的泛化能力。
+
+### 核心优势 (Key Advantages)
+
+* **全体裁泛化 (Cross-Domain Adaptability)**：不再局限于小说场景。通过 Phase 1 的体裁识别，它能自动为技术博客、商业报告、学术摘要等不同领域匹配最佳的“反 AI 指纹”策略。
+* **自适应扰动 (Adaptive Perturbation)**：模型会先自主标记当前体裁下的“高概率陈词滥调（AI Fingerprints）”，并在生成正文前主动压制这些 Token 的权重。
+* **深度解耦 (Decoupled Logic)**：将“写什么”与“AI 习惯怎么写”彻底分开，强制模型在 `<thought_process>` 中完成从宏观定位到微观粉碎的完整推演。
+
+### 性能表现 (Benchmark)
+
+根据实测数据（含 17 个思考块的长文本任务），两步思考版表现出了更具统治力的抗检测性：
+
+| 指标 (Metrics) | 重写前 (Original) | 重写后 (GhostCoT v2) | 变化 (Delta) |
+| :--- | :--- | :--- | :--- |
+| **平均 AI 概率 (Avg. Prob)** | 0.9730 | **0.4153** | **-57.31%** |
+| **平均曲率 (Avg. Curvature)** | 3.9832 | **1.0477** | **-73.70%** |
+| **LCS 相似度 (LCS Similarity)** | — | 0.4269 | — |
+
+## 🚀 Template Example:
+
+👉 **[Prompt Template](./ghostCot_two_steps_thinking_cn.jinja)**
+
+
+---
+
