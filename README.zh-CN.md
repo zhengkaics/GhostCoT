@@ -11,7 +11,7 @@
 
 本开源项目提出了一种纯基于 Prompt 工程的零样本（Zero-Shot）文本重写架构。通过引入**隐式思维链（Implicit Chain-of-Thought, CoT）**与**强制变异指令**，GhostCoT 能够在保持文本逻辑连贯性的前提下，彻底破坏大语言模型（LLM）默认的均质概率分布，成功绕过以 [Fast-DetectGPT](https://github.com/baoguangsheng/fast-detect-gpt) 为代表的基于概率曲率（Probability Curvature）的 AI 内容检测引擎。
 
-## 📊 Benchmark 测试数据
+## 📊 Benchmark 测试数据 10 chunks
 
 在没有任何外部 RAG 数据注入的情况下，单次 Prompt 调用的真实对抗测试结果如下：
 
@@ -86,7 +86,7 @@ Transformer 模型本质上是一个“Next-Token Predictor”。
 
 ### 性能表现 (Benchmark)
 
-根据实测数据（含 17 个思考块的长文本任务），两步思考版表现出了更具统治力的抗检测性：
+根据实测数据（含 17/20 个思考块的长文本任务），两步思考版表现出了更具统治力的抗检测性：
 
 | 指标 (Metrics) | 重写前 (Original) | 重写后 (GhostCoT v2) | 变化 (Delta) |
 | :--- | :--- | :--- | :--- |

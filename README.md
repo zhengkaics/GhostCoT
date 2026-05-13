@@ -11,7 +11,7 @@
 
 This open-source project introduces a Zero-Shot text rewriting architecture based purely on Prompt Engineering. By introducing an **Implicit Chain-of-Thought (CoT)** combined with **Forced Mutation Directives**, GhostCoT completely disrupts the homogeneous probability distribution typical of Large Language Models (LLMs). It successfully bypasses AI content detection engines like [Fast-DetectGPT](https://github.com/baoguangsheng/fast-detect-gpt) that rely on log-probability curvature—all while maintaining absolute logical coherence in the text.
 
-## 📊 Benchmark Results
+## 📊 Benchmark Results 10 chunks
 
 In real-world adversarial testing with zero external RAG data injection, a single API call yielded the following results:
 
@@ -88,7 +88,7 @@ Beyond the creative-focused standard version, we introduce the **GhostCoT Two-St
 
 ### Benchmark Performance
 
-Based on real-world testing (tasks involving 17 thought chunks), the Two-Stage version demonstrates dominant anti-detection capabilities:
+Based on real-world testing (tasks involving 17/20 thought chunks), the Two-Stage version demonstrates dominant anti-detection capabilities:
 
 | Metrics | Original (Pre-rewrite) | GhostCoT v2 (Post-rewrite) | Delta |
 | :--- | :--- | :--- | :--- |
